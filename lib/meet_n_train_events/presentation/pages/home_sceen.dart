@@ -8,6 +8,7 @@ import 'package:meetntrain/meet_n_train_events/core/utiles/font_styles.dart';
 import 'package:meetntrain/meet_n_train_events/presentation/widgets/event_builder.dart';
 import 'package:meetntrain/meet_n_train_events/presentation/cubit/events_cubit.dart';
 import 'package:meetntrain/meet_n_train_events/presentation/cubit/events_state.dart';
+import 'package:meetntrain/meet_n_train_events/presentation/widgets/evevts_card_items.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -92,7 +93,9 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: EventBuilder(events: EventsCubit.get(context).events!),
+                child: EventBuilder(
+                  events: EventsCubit.get(context).events!,
+                ),
               ),
             ],
           ),

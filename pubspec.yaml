@@ -21,10 +21,9 @@ dependencies:
   dio:
   dartz:
   get_it:
+  scrollable_positioned_list:
   google_fonts:
   conditional_builder_null_safety:
-  paged_vertical_calendar:
-  scrollable_positioned_list:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

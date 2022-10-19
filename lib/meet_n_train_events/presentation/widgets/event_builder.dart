@@ -19,18 +19,25 @@ class _EventBuilderState extends State<EventBuilder> {
   @override
   void initState() {
     super.initState();
-    EventsCubit.get(context)
-        .itemPositionsListener
-        .itemPositions
-        .addListener(() {
-      EventsCubit.get(context).changeItemIndex(EventsCubit.get(context)
-          .itemPositionsListener
-          .itemPositions
-          .value
-          .first
-          .index);
-      debugPrint(
-          'index : ${EventsCubit.get(context).itemPositionsListener.itemPositions.value.first.index}');
+    EventsCubit cubit = EventsCubit.get(context);
+
+    /// fetch events item that now in the top
+    cubit.itemPositionsListener.itemPositions.addListener(() {
+      if (cubit.itemPositionsListener.itemPositions.value.first.index !=
+          cubit.currentIndex && cubit.events![cubit.itemPositionsListener.itemPositions.value.first.index].date != cubit.events![cubit.currentIndex].date!) {
+        /// share the index of item to get date in the upper row
+        cubit.changeItemIndex(
+          cubit.itemPositionsListener.itemPositions.value.first.index,
+        );
+      }
+      /// make pagination if the user scroll to the end of the list
+      if (cubit.itemPositionsListener.itemPositions.value.last.index ==
+          cubit.events!.length - 1) {
+        debugPrint(
+            'last index : ${cubit.itemPositionsListener.itemPositions.value.last.index}');
+        cubit.pageNum < 3 ? cubit.loadMorePagination() : null;
+        debugPrint('load more pagination');
+      }
     });
   }
 
@@ -39,18 +46,23 @@ class _EventBuilderState extends State<EventBuilder> {
     EventsCubit cubit = EventsCubit.get(context);
     return ConditionalBuilder(
       condition: widget.events.isNotEmpty,
-      builder: (context) => ScrollablePositionedList.separated(
-        itemPositionsListener: cubit.itemPositionsListener,
-        itemScrollController: cubit.itemScrollController,
-        physics: const BouncingScrollPhysics(),
-        itemBuilder: (context, index) {
-          return EventsCard(
-            event: widget.events[index],
-          );
+      builder: (context) => RefreshIndicator(
+        backgroundColor: Colors.white,
+        onRefresh: () async {
+          cubit.refreshPagination();
         },
-        separatorBuilder: (context, index) => AppSpaces.vSpace20,
-        itemCount: 8,
-        // events.length,
+        child: ScrollablePositionedList.separated(
+          itemPositionsListener: cubit.itemPositionsListener,
+          itemScrollController: cubit.itemScrollController,
+          physics: const BouncingScrollPhysics(),
+          itemBuilder: (context, index) {
+            return EventsCard(
+              event: cubit.events![index],
+            );
+          },
+          separatorBuilder: (context, index) => AppSpaces.vSpace20,
+          itemCount: cubit.events!.length,
+        ),
       ),
       fallback: (context) => const Center(
         child: CircularProgressIndicator(),

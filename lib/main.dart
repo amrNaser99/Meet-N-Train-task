@@ -29,13 +29,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<EventsCubit>(
-      create: (context) => sl<EventsCubit>()
-        ..getEvents(
-          pageNumber: 1,
-          date: DateFormat('yyyy-MM-dd').format(
-            DateTime.now(),
-          ),
-        ),
+      create: (context) => sl<EventsCubit>(),
+
       child: BlocBuilder<EventsCubit, EventsState>(
         builder: (context, state) {
           return ScreenUtilInit(

@@ -1,6 +1,7 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:meetntrain/meet_n_train_events/core/utiles/app_color.dart';
 import 'package:meetntrain/meet_n_train_events/core/utiles/font_styles.dart';
 import 'package:meetntrain/meet_n_train_events/presentation/cubit/events_cubit.dart';
@@ -23,7 +24,23 @@ class _StartScreenState extends State<StartScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<EventsCubit, EventsState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is GetEventsSuccessState && state.events.isNotEmpty) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const HomeScreen(),
+            ),
+          );
+        }
+        if (state is ErrorState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.exception.toString()),
+            ),
+          );
+        }
+      },
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(),
@@ -53,11 +70,12 @@ class _StartScreenState extends State<StartScreen> {
                                     BorderRadius.all(Radius.circular(10))),
                             color: AppColors.primaryColor,
                             onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const HomeScreen()));
+                              debugPrint('DateTime now${DateTime.now().toUtc()}');
+                              EventsCubit.get(context).getEvents(
+                                pageNumber: EventsCubit.get(context).pageNum,
+                                date: DateTime.now().toUtc().toString(),
+                              );
+
                             },
                             child: Text(
                               'Start',

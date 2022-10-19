@@ -20,8 +20,7 @@ class EventsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<EventsCubit, EventsState>(
-      listener: (context, state) {},
+    return BlocBuilder<EventsCubit, EventsState>(
       builder: (context, state) {
         return SizedBox(
           width: MediaQuery.of(context).size.width,
@@ -47,11 +46,11 @@ class EventsCard extends StatelessWidget {
                           fontColor: AppColors.white, fontSize: AppSize.s12),
                     ),
                     Text(
-                        DateFormat.yMEd()
-                            .format(
-                          DateTime.parse(event.date!),
-                        )
-                            .split(',')[0],
+                      DateFormat.yMEd()
+                          .format(
+                        DateTime.parse(event.date!),
+                      )
+                          .split(',')[0],
                       style: getBoldStyle(
                           fontColor: AppColors.white, fontSize: AppSize.s10),
                     ),
@@ -79,7 +78,6 @@ class EventsCard extends StatelessWidget {
                                 ),
                                 child: Image.network(
                                   BASE_IMAGE + event.images![0].imageUrl!,
-                                  // 'https://iso.500px.com/wp-content/uploads/2016/03/stock-photo-142984111.jpg',
                                   height: 200,
                                   width: double.infinity,
                                   fit: BoxFit.cover,
@@ -154,7 +152,7 @@ class EventsCard extends StatelessWidget {
 
                           Padding(
                             padding:
-                                EdgeInsets.symmetric(horizontal: AppSize.s2),
+                            EdgeInsets.symmetric(horizontal: AppSize.s2),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
@@ -162,7 +160,7 @@ class EventsCard extends StatelessWidget {
                                   flex: 2,
                                   child: Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         '${DateFormat.yMMMEd().format(
@@ -208,48 +206,53 @@ class EventsCard extends StatelessWidget {
                                         overflow: TextOverflow.fade,
                                       ),
                                       AppSpaces.vSpace10,
-                                      Stack(
-                                        clipBehavior:
-                                            Clip.antiAliasWithSaveLayer,
-                                        children: [
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              color: AppColors.softGrey,
+                                      event.users!.isNotEmpty ? Container(
+                                        width: 100,
+                                        child: Stack(
+                                          children: [
+                                            Container(
+                                              clipBehavior: Clip
+                                                  .antiAliasWithSaveLayer,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                BorderRadius.circular(
+                                                    20),
+                                                color: Colors.white,
+                                              ),
+
+                                              child: CircleAvatar(
+                                                radius: 12,
+                                                child:  Image.network(
+                                                    BASE_IMAGE +
+                                                        event.users![0]
+                                                            .profilePicture!) ,
+                                              ),
                                             ),
-                                            child: CircleAvatar(
-                                              radius: 12,
-                                              child: Image.network(
-                                                  BASE_IMAGE +
-                                                      event.users![0]
-                                                          .profilePicture!),
-                                            ),
-                                          ),
-                                          //   PositionedDirectional(
-                                          //   start: 20,
-                                          //   child: Container(
-                                          //     clipBehavior: Clip
-                                          //         .antiAliasWithSaveLayer,
-                                          //     decoration: BoxDecoration(
-                                          //       borderRadius:
-                                          //       BorderRadius.circular(
-                                          //           20),
-                                          //       color: Colors.white,
-                                          //     ),
-                                          //     child: CircleAvatar(
-                                          //       radius: 12,
-                                          //       child: Image.network(
-                                          //         BASE_IMAGE +
-                                          //             event.users![index]
-                                          //                 .profilePicture!,
-                                          //         fit: BoxFit.cover,
-                                          //       ),
-                                          //     ),
-                                          //   ) ,
-                                          // ) ,
-                                        ],
-                                      ),
+                                            PositionedDirectional(
+                                              start: 20,
+                                              child: Container(
+                                                clipBehavior: Clip
+                                                    .antiAliasWithSaveLayer,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                  BorderRadius.circular(
+                                                      20),
+                                                  color: Colors.white,
+                                                ),
+                                                child: CircleAvatar(
+                                                  radius: 12,
+                                                  child: Image.network(
+                                                    BASE_IMAGE +
+                                                        event.users![0]
+                                                            .profilePicture!,
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                              ) ,
+                                            ) ,
+                                          ],
+                                        ),
+                                      ) : Container(),
                                     ],
                                   ),
                                 ),
@@ -287,7 +290,7 @@ class EventsCard extends StatelessWidget {
                   ),
                 ]),
               ),
-              const Spacer(),
+              // const Spacer(),
             ],
           ),
         );
